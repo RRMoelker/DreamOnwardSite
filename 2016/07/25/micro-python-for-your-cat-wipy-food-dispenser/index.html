@@ -1,0 +1,480 @@
+<!DOCTYPE html>
+<html lang="en">
+
+  <head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <title>MicroPython for your cat (WiPy food dispenser) | DreamOnward</title>
+  <meta name="description" content="To my knowledge there are two ways to feed a cat:">
+
+  <link href="https://fonts.googleapis.com/css?family=Roboto|Roboto+Condensed" rel="stylesheet">
+
+  <link type="text/css" rel="stylesheet" href="/assets/main-f021d588a416e00beed710bc60b3e7d8ac016a8d0eb7a5f17faa05cb145c27b4.css">
+  <link type="text/css" rel="stylesheet" href="/assets/syntax-pygments-306491d01ec67c312c7391230abbf00e22dbdb2a9c283cb4cf00dc270ce28162.css">
+  <link href="/assets/vendor/lightbox/css/lightbox.min.css" rel="stylesheet">
+  <link rel="canonical" href="https://dreamonward.com/2016/07/25/micro-python-for-your-cat-wipy-food-dispenser/">
+</head>
+
+
+  <body>
+    <header class="banner" role="banner">
+  <nav class="container site-nav">
+
+    <a class="site-logo-space" href="/">
+      <div class="site-logo">
+        <img src="/assets/img/DreamOnward_logo_v1-800x800.png" height="60" srcset="/assets/img/DreamOnward_logo_v1-800x800.png 1x, /assets/img/DreamOnward_logo_v1-800x800.png 2x, /assets/img/DreamOnward_logo_v1-800x800.png 3x"> 
+      </div>
+      <div class="site-header-titles">
+        <h1 class="site-header-title">DreamOnward</h1>
+        <span class="site-header-subtitle">Full stack web development</span>
+      </div>
+    </a>
+
+    <ul>
+      
+        
+        <li>
+          <a href="/projects">Projects</a>
+        </li>
+        
+      
+    </ul>
+  </nav>
+
+
+</header>
+
+
+    <main class="page-content" aria-label="Content">
+    <article class="post container" itemscope itemtype="http://schema.org/BlogPosting">
+
+  <header class="post-header">
+    <h1 class="post-title" itemprop="name headline">MicroPython for your cat (WiPy food dispenser)</h1>
+    <p class="post-meta"><time datetime="2016-07-25T00:00:00+02:00" itemprop="datePublished">Jul 25, 2016</time></p>
+  </header>
+
+  <div class="post-content" itemprop="articleBody">
+    <p>To my knowledge there are two ways to feed a cat:</p>
+
+<ol>
+  <li>Always have food out (unhealthy &amp; what goes in must come out)</li>
+  <li>Give a set amount of food each day (healthy but tedious)</li>
+</ol>
+
+<p>So I would prefer the second option and control the food intake of my cat (cats actually). This seems like an easily automatable problem. Step 1, buy an automatic cat dispensing unit. Step 2, profit. The problem is that these devices aren’t really cat proof, see:</p>
+
+<style>.embed-container { position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden; max-width: 100%; } .embed-container iframe, .embed-container object, .embed-container embed { position: absolute; top: 0; left: 0; width: 100%; height: 100%; }</style>
+<div class="embed-container">    <iframe title="YouTube video player" width="640" height="390" src="//www.youtube.com/embed/sJeVyN8LWbs" frameborder="0" allowfullscreen=""></iframe></div>
+<p>Exhibit A: cat brain over machine</p>
+
+<style>.embed-container { position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden; max-width: 100%; } .embed-container iframe, .embed-container object, .embed-container embed { position: absolute; top: 0; left: 0; width: 100%; height: 100%; }</style>
+<div class="embed-container">    <iframe title="YouTube video player" width="640" height="390" src="//www.youtube.com/embed/MnBl-vFk59Q" frameborder="0" allowfullscreen=""></iframe></div>
+<p>Exhibit B: cat brawn over machine (turn off sound if you can)</p>
+
+<p>So, great idea, instead of buying an off the shelf food dispenser, lets create our own, do it yourself, cat feeder! Tada:</p>
+
+<style>.embed-container { position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden; max-width: 100%; } .embed-container iframe, .embed-container object, .embed-container embed { position: absolute; top: 0; left: 0; width: 100%; height: 100%; }</style>
+<div class="embed-container">    <iframe title="YouTube video player" width="640" height="390" src="//www.youtube.com/embed/i9h42aMI_tM" frameborder="0" allowfullscreen=""></iframe></div>
+<p>WiPy powered cat food dispenser, prototype. Yes, there is also an Arduino in the video, but it only acts as a power supply :)</p>
+
+<p>Hmmm, not quite as polished as I had envisioned. It is more like a basic prototype. But it did teach me how to control hobby servo’s with the WiPy. Which coming from a Arduino &amp; Raspberry Pi background is not as simple as one would expect. It’s not just a case of making some library calls. You’ll have to work with timers and do some actual calculations.</p>
+
+<p>So in this post we’ll see how to use the on board timers to send a pulse width modulated (PWM) signal to a servo. If you are unfamiliar with the WiPy development board, have a look at <a href="https://medium.com/@ruurdm/wipy-getting-started-dda1c84d69c2#.rt7w6isth">the getting started blog post</a>. Otherwise read on, you’ll learn how to:</p>
+
+<ul>
+  <li>Calculate PWM configuration values for a servo angle</li>
+  <li>Use timers to send a PWM signal on the WiPy</li>
+  <li>How to make a DIY cat feeder, though be warned, it is not production ready</li>
+</ul>
+
+<h2 id="servo-wiring">Servo wiring</h2>
+<p>Wiring a servo is pretty straight forward.</p>
+
+<p class="img-medium img-left"><img src="/2016/07/25/micro-python-for-your-cat-wipy-food-dispenser/servo_wiring.png" alt="Simple servo wiring with WiPy and secondary power source" /></p>
+
+<p>For the servo in this post we supply 5V to the vcc (red) wire. GND connects to the servo brown wire (often black). And the remaining wire carries our signal and connects to the GPIO pin of the WiPy.</p>
+
+<p>The servo power comes from a second power supply. To get the two power supplies to work in sync we’ll connect the grounds.</p>
+
+<h2 id="servo-control">Servo control</h2>
+<p>To control the hobby servos we’ll need to send PWM (Pulse Width Modulation) signals. To create a PWM signal the WiPy has a set of special pins that connect to hardware timers. We’ll look how to calculate the right PWM values and see how to configure a timer so it sends the right signal.</p>
+
+<h3 class="float-clear" id="pwm">PWM</h3>
+<p>A PWM signal is used to control most hobby servos. This signal is an series of high and low voltages. The width the high voltage is varied but the cycle as a whole has a fixed length (see image below). The servo we’ll use here has a PWM pulse width between 800µs and 2100µs (<a href="http://www.servodatabase.com/servo/modelcraft/4519">full specs</a>). Meaning, a signal of 800µs will correspond to a servo angle of 0 degrees. And a signal of 2100µs will correspond to the full servo rotation angle of 120 degrees. It is simplest to see as a diagram:</p>
+
+<p class="img-center"><img src="/2016/07/25/micro-python-for-your-cat-wipy-food-dispenser/PWM_explained_5.jpg" alt="PWM signal for varying servo angles. PWM frame is a full cycle of both the high and low signal." /></p>
+
+<p>The duty cycle on the WiPy timers control the PWM signal. The duty cycle is the fraction of an entire PWM signal that has high voltage. The duty cycle for a target servo angle is calculated as follows. First we calculate the fraction the target angle is of the full servo range. Next the pulse width of the target angle is calculated. Finally we use the pulse width to determine the duty cycle.</p>
+
+<h4 id="calculate-the-angle-fraction">1) Calculate the angle fraction</h4>
+<p>For the width calculation we need to know what fraction the target angle is of the full servo range. In Python code this accounts to:</p>
+
+<p class="indent-code">angle_fraction = angle / ROTATIONAL_RANGE</p>
+
+<h4 id="angle-fraction-to-pulse-width">2) Angle fraction to pulse width</h4>
+<p>We calculate the pulse width from the angle fraction:</p>
+
+<p class="indent-code">pulse_width = PULSE_MIN + angle_fraction * (PULSE_MAX — PULSE_MIN)</p>
+
+<h4 id="pulse-width-to-percentage-of-pwm-frame">3) Pulse width to percentage of PWM frame</h4>
+<p>The WiPy PWM signal is controlled by a timer that takes the signal frequency and duty cycle as an input. For this servo a frequency of 50Hz works well. The duty cycle is the percentage of a single PWM pulse that is high voltage.</p>
+
+<p>The PWM signal frame is duration of a full signal cycle (high and low part). Given the frequency we calculate it by:</p>
+
+<p class="indent-code">frame = 1 second / FREQUENCY</p>
+
+<p>The fraction the signal is high vs low, the duty cycle, is obtained using:</p>
+
+<p class="indent-code">duty_cycle = pulse_width / frame</p>
+
+<p>This equates to the duty cycle as a fraction of a full frame. But that is not what we need. The API requires it to be in 1/100th of percentages. This is because we don’t have the luxury of floating point arithmetic. The drawback of having only integers is that our calculations are way off.</p>
+
+<h3 id="math-magic-to-circumvent-lack-of-floating-point-support">Math magic to circumvent lack of floating point support</h3>
+<p>Not have floating point operations in the WiPy is a bit of a hassle. But we can still do our calculations by shifting all our calculations well clear of the zero. Remember that we can multiply an equation on both sides and still have it remain true.</p>
+
+<p>The following code has accurate calculations, by multiplying the equations by 100. Care is taken to multiply first and do integer division as late as possible:</p>
+
+<figure class="highlight no-err"><pre><code class="language-python" data-lang="python"><span class="c"># angle100 target angle in degrees * 100</span>
+<span class="c"># ROTATIONAL_RANGE_100 is servo full rotation in degrees * 100</span>
+<span class="c"># PULSE_MIN &amp; PULSE_MAX are in µs</span>
+<span class="c"># PERC_100 is 100% * 100</span>
+
+<span class="n">angle_fraction</span> <span class="o">=</span> <span class="n">PERC_100</span> <span class="o">*</span> <span class="n">angle100</span> <span class="o">//</span> <span class="n">ROTATIONAL_RANGE_100</span>  <span class="c"># in 100% * 100 format</span>
+<span class="n">pulse_width</span> <span class="o">=</span> <span class="n">PULSE_MIN</span> <span class="o">+</span> <span class="n">angle_fraction</span> <span class="o">*</span> <span class="p">(</span><span class="n">PULSE_MAX</span> <span class="err">—</span> <span class="n">PULSE_MIN</span><span class="p">)</span><span class="o">//</span> <span class="n">PERC_100</span>  <span class="c"># in µs</span>
+<span class="n">frame</span> <span class="o">=</span> <span class="mi">1000000</span><span class="err">µ</span><span class="n">s</span> <span class="o">//</span> <span class="n">FREQUENCY</span>
+<span class="n">duty_cycle</span> <span class="o">=</span> <span class="n">PERC_100</span> <span class="o">*</span> <span class="n">pulse_width</span> <span class="o">//</span> <span class="n">frame</span></code></pre></figure>
+
+<h3 id="timer-to-pwm-signal">Timer to PWM signal</h3>
+<p>Instead of writing the signal timing code ourselves, we we use the timer on the board. We control what percentage of each frame the signal is high by setting the duty cycle. At a hardware level the timer connects to an output pin.</p>
+
+<p>A couple of pins on the WiPy support PWM. Yet actually controlling such a pin through a timer is bit tricky. The information is available in the <a href="https://raw.githubusercontent.com/wipy/wipy/master/docs/PinOUT.png">pinout image</a>. See the table for the same information but reformatted</p>
+
+<pre class="highlight">
++----------+----------+-----+-------+---------------+
+| GPIO pin | Alt code | PWM | Timer | Timer channel |
++----------+----------+-----+-------+---------------+
+|        9 |        3 |   6 |     2 | B             |
+|       10 |        3 |   7 |     3 | A             |
+|       11 |        3 |   8 |     3 | B             |
+|       24 |        5 |   1 |     0 | A             |
++----------+----------+-----+-------+---------------+
+</pre>
+
+<p>We’ll use GP pin 9 to control our servo. The pin is controlled by timer 2, channel B. The pin will follow the timer by setting the pin alt function to 3. In Python code this is done by:</p>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="n">Pin</span><span class="p">(</span><span class="mi">9</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="n">Pin</span><span class="o">.</span><span class="n">ALT</span><span class="p">,</span> <span class="n">alt</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
+<span class="n">timer</span> <span class="o">=</span> <span class="n">Timer</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="n">Timer</span><span class="o">.</span><span class="n">PWM</span><span class="p">)</span>
+<span class="n">channel</span> <span class="o">=</span> <span class="n">timer</span><span class="o">.</span><span class="n">channel</span><span class="p">(</span><span class="n">Timer</span><span class="o">.</span><span class="n">B</span><span class="p">,</span> <span class="n">freq</span><span class="o">=</span><span class="n">freq</span><span class="p">)</span></code></pre></figure>
+
+<p>For more details see the <a href="http://micropython.org/resources/docs/en/latest/wipy/library/machine.Timer.html">timer documentation</a> and <a href="http://micropython.org/resources/docs/en/latest/wipy/library/machine.Timer.html#machine.Timer.channel">channel documentation</a>.</p>
+
+<p>The fraction of the PWM frame for which the pin has a high output is determined by the duty cycle. We set the duty cycle using:</p>
+
+<p class="indent-code">self.channel.duty_cycle(duty_cycle)</p>
+
+<h3 id="angle-to-actuation">Angle to actuation</h3>
+<p>We can now configure a pin timer combination and provide it with the correct duty cycle value. So putting it all together, we can now make a servo loop through its full rotational range:</p>
+
+<noscript><pre>#
+# Rotate servo over full rotational range
+#
+import time
+from machine import Pin, Timer
+
+# Servo specific constants
+PULSE_MIN = 900  # in us, actually bit higher than specs indicate
+PULSE_MAX = 2100  # in us
+FREQUENCY = 50  # Hz
+ROTATIONAL_RANGE_100 = 12000  # 120deg * 100
+
+# Helper constants
+PERC_100 = 10000  # in 100% * 100
+SERVO_WAIT = 100  # in ms
+
+led = Pin(&#39;GP25&#39;, mode=Pin.OUT)
+led(0)  # turn off the heartbeat LED
+
+Pin(&#39;GP9&#39;, mode=Pin.ALT, alt=3)
+timer = Timer(2, mode=Timer.PWM)
+channel = timer.channel(Timer.B, freq=FREQUENCY)
+
+
+def set_angle(angle):
+    angle100 = angle * 100  # in degrees * 100
+    angle_fraction = PERC_100 * angle100 // ROTATIONAL_RANGE_100  # in 100% * 100 format
+    pulse_width = PULSE_MIN + angle_fraction * (PULSE_MAX - PULSE_MIN) // PERC_100  # in µs
+    frame = 1000000 // FREQUENCY  # in µs
+    duty_cycle = PERC_100 * pulse_width // frame  # in 100% * 100 format
+    channel.duty_cycle(duty_cycle)
+
+
+for angle in range(0, 120):
+    set_angle(angle)
+    time.sleep_ms(SERVO_WAIT)
+
+led(1)  # turn on the heartbeat LED
+</pre></noscript>
+<script src="https://gist.github.com/RRMoelker/02e5e26f5153078298522b09090f19b4.js"> </script>
+
+<p>Below you can see the video of a WiPy running the code above.</p>
+
+<style>.embed-container { position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden; max-width: 100%; } .embed-container iframe, .embed-container object, .embed-container embed { position: absolute; top: 0; left: 0; width: 100%; height: 100%; }</style>
+<div class="embed-container">    <iframe title="YouTube video player" width="640" height="390" src="//www.youtube.com/embed/PQU8Eq6NyFI" frameborder="0" allowfullscreen=""></iframe></div>
+
+<p>Servo going through full rotation using PWM signal through WiPy timer.</p>
+
+<h2 id="servo-library">Servo library</h2>
+<p>As a final step, we can refactor everything so the math and configuration is removed from our business logic. Or we can just use <a href="https://github.com/RRMoelker/WiPy-servo">the WiPy servo library</a> I created by doing just that. If we use that library, we can simplify the code from before to:</p>
+
+<noscript><pre># coding=utf-8
+#
+# Rotate servo over full rotational range
+#
+import time
+from machine import Pin
+
+from servo import Servo
+
+# Configuration
+SERVO_WAIT = 100  # in ms
+servo_pin = 9  # GP pin
+
+# Servo specific constants
+PULSE_MIN = 900  # in µs, actually bit higher than specs indicate
+PULSE_MAX = 2100  # in µs
+FREQUENCY = 50  # Hz
+ROTATIONAL_RANGE_100 = 12000  # 120deg * 100
+
+led = Pin(&#39;GP25&#39;, mode=Pin.OUT)
+led(0)  # turn off the heartbeat LED
+
+servo = Servo(servo_pin,
+              FREQUENCY,
+              ROTATIONAL_RANGE_100,
+              PULSE_MIN,
+              PULSE_MAX)
+
+for angle in range(0, 120):
+    servo.angle(angle * 100)
+    time.sleep_ms(SERVO_WAIT)
+
+led(1)  # turn on the heartbeat LED
+
+</pre></noscript>
+<script src="https://gist.github.com/RRMoelker/01b2a03eeb0cb6b0f18400ccc9bc439c.js"> </script>
+
+<p>You can upload it by cloning the servo lib next to the “main.py” file:
+git clone git@github.com:RRMoelker/WiPy-servo.git
+Then upload both the “main.py” and “servo.py” files by creating the following file:</p>
+
+<noscript><pre>#!/bin/bash
+
+# first argument is WiPy ip
+
+lftp -u micro,python $1 &lt;&lt; EOF
+
+cd /flash
+put main.py
+put WiPy-servo/servo.py
+
+bye
+EOF</pre></noscript>
+<script src="https://gist.github.com/RRMoelker/e92e9dfc787add07aaffb0c708f0fc43.js"> </script>
+
+<p>Call the upload script with your WiPy ip using:</p>
+
+<p class="indent-code">sh ./upload.sh <the.wi.py.ip></the.wi.py.ip></p>
+
+<h2 id="putting-it-to-work">Putting it to work</h2>
+<p>The whole point of controlling some hobby servos was to create a cat food dispenser. We’ll have a quick look at the dispenser in this project. Do note, that it does not perform as well as I hoped, so view it as a nice experiment rather than a blueprint on how to make one.
+For what I can tell there a two types of mechanisms to control the “flow” of food.</p>
+
+<p class="img-center"><img src="/2016/07/25/micro-python-for-your-cat-wipy-food-dispenser/two_designs.jpg" alt="Two types of food dispense systems. Left using a cart wheel. Right using some sort of hatch/valve." /></p>
+
+<p class="img-medium img-left"><img src="/2016/07/25/micro-python-for-your-cat-wipy-food-dispenser/double-latch-dispenser.jpg" alt="Food dispense system created using two rotating disc with a small opening to let food through." /></p>
+
+<p>I opted for the second option. And by using two sliding latches we can more accurately dose the food portions.</p>
+
+<p>I used an old CD with a hole the size of the inner tube glued to a servo to open and close a single port. The mechanism allows to ration portions of about 10 grams.</p>
+
+<p class="float-clear-after">The dispenser food cycle code opens and closes the top and bottom servos. It intentionally stutters at a few set angles so that pieces of food that become lodged have a chance to slip free.</p>
+
+<p>The python code for a single dispense cycle is as follows:</p>
+
+<noscript><pre># coding=utf-8
+#
+# Loop through food delivery cycle
+#
+import time
+from machine import Pin
+
+from servo import Servo
+
+led = Pin(&#39;GP25&#39;, mode=Pin.OUT)
+led(0)  # turn off the heartbeat LED
+
+SERVO_WAIT = 50
+
+# Servo specific constants
+PULSE_MIN = 900  # in µs, actually bit higher than specs indicate
+PULSE_MAX = 2100  # in µs
+FREQUENCY = 50  # Hz
+ROTATIONAL_RANGE_100 = 12000  # 120deg * 100
+
+servo_top = Servo(10, FREQUENCY, ROTATIONAL_RANGE_100, PULSE_MIN, PULSE_MAX)
+servo_bottom = Servo(9, FREQUENCY, ROTATIONAL_RANGE_100, PULSE_MIN, PULSE_MAX)
+
+top_servo_limits = {
+    &#39;open&#39;: 0,  # deg
+    &#39;stutter&#39;: [75, 74, 73],  # deg
+    &#39;closed&#39;: 100,  # deg
+    &#39;direction&#39;: -1,  # angle direction from closed to open
+}
+
+bottom_servo_limits = {
+    &#39;open&#39;: 120,  # deg
+    &#39;stutter&#39;: [90, 100, 110],
+    &#39;closed&#39;: 20,  # deg
+    &#39;direction&#39;: 1,  # # angle direction from closed to open
+}
+
+
+def get_next_stutter(stutter_array):
+    if (len(stutter_array) &gt; 0):
+        return stutter_array.pop()
+    else:
+        return None
+
+
+def set_angle(servo, angle):
+    servo.angle(angle * 100)
+    time.sleep_ms(SERVO_WAIT)
+
+
+def move_servo(servo, from_angle, to_angle, dir, stutter_array=[]):
+    &quot;&quot;&quot;
+    Open or close servo, possibly shutters a bit to prevent jamming
+    &quot;&quot;&quot;
+    stutter = get_next_stutter(stutter_array)
+
+    range1 = range(from_angle, to_angle, dir)
+    for angle in range1:
+        set_angle(servo, angle)
+
+        if angle == stutter:
+            stutter_angles = range(angle + -15 * dir, angle, dir)
+            for angle in stutter_angles:
+                set_angle(servo, angle)
+            stutter = get_next_stutter(stutter_array)
+
+
+def cycle_servo(servo, limits):
+    &quot;&quot;&quot;
+    Open and close servo
+    &quot;&quot;&quot;
+    print(&#39;opening&#39;)
+    move_servo(servo, limits[&#39;closed&#39;], limits[&#39;open&#39;], limits[&#39;direction&#39;])
+
+    print(&#39;closing&#39;)
+    move_servo(servo, limits[&#39;open&#39;], limits[&#39;closed&#39;], limits[&#39;direction&#39;] * -1, limits[&#39;stutter&#39;])
+
+
+cycle_servo(servo_top, top_servo_limits)
+cycle_servo(servo_bottom, bottom_servo_limits)
+
+led(1)  # turn on the heartbeat LED
+</pre></noscript>
+<script src="https://gist.github.com/RRMoelker/856839b07f34c5c5f71c7829622eb4c9.js"> </script>
+
+<p>The dispenser works. But it does jam occasionally, so I wouldn’t use it for long periods while I’m away. That unfortunately defeats the point of making an automatic dispenser. So it is definitely not “production” ready.</p>
+
+<p>That said, even though the jamming is a problem, it is a recoverable one. The servo jams while closing, not while opening, so if it does jam we can always open it. Of course that may open the food floodgates. But worse comes to worse, you aren’t likely to starve your cat short of a electrical failure.</p>
+
+<p>Of course there are some other glaring problems with this system. Like not having a casing and having little spacing for a cat to eat. Any future version will surely fix those issues. And it would make use of interrupt sensors to provide feedback whether food is actually dispensed.</p>
+
+<h2 id="servo-food-serving">Servo food serving</h2>
+<p>This should have gotten you started controlling servo’s using a PWM signal. And you should be able to control a servo using the WiPy on board timers. Finally, I hope the cat dispenser design has inspired some of you to create your own system. Please let me know when you come up with a working cat proof design :).</p>
+
+  </div>
+
+</article>
+
+    </main>
+
+    <footer class="site-footer" itemscope="" itemtype="http://schema.org/Corporation">
+  <div class="container">
+    <div class="footer-block"
+        itemprop="address" 
+        itemscope="" 
+        itemtype="http://schema.org/PostalAddress">
+      <h4 class="show-for-sr">Contact</h4>
+      <a 
+        href="https://www.google.com/maps/place/Kremerpad+11,+Hilversum,+Netherlands/@52.242604,5.1749074,17"
+        title="Address in Google maps" 
+        itemprop="address"
+        itemscope=""
+        itemtype="http://schema.org/PostalAddress">
+        <span itemprop="name"><strong>DreamOnward</strong></span><br>
+        <span itemprop="streetAddress">Kremerpad 11</span><br>
+        <span itemprop="postalCode">1222 DB</span> <span itemprop="addressLocality">Hilversum</span>
+      </a>
+    </div>
+
+    <div class="footer-block">
+      <h4 class="show-for-sr">Media</h4>
+      <ul class="social-media-list">
+        
+        <li>
+          <a href="https://github.com/rrmoelker"><span class="icon icon--github"><svg viewBox="0 0 16 16"><path d="M7.999,0.431c-4.285,0-7.76,3.474-7.76,7.761 c0,3.428,2.223,6.337,5.307,7.363c0.388,0.071,0.53-0.168,0.53-0.374c0-0.184-0.007-0.672-0.01-1.32 c-2.159,0.469-2.614-1.04-2.614-1.04c-0.353-0.896-0.862-1.135-0.862-1.135c-0.705-0.481,0.053-0.472,0.053-0.472 c0.779,0.055,1.189,0.8,1.189,0.8c0.692,1.186,1.816,0.843,2.258,0.645c0.071-0.502,0.271-0.843,0.493-1.037 C4.86,11.425,3.049,10.76,3.049,7.786c0-0.847,0.302-1.54,0.799-2.082C3.768,5.507,3.501,4.718,3.924,3.65 c0,0,0.652-0.209,2.134,0.796C6.677,4.273,7.34,4.187,8,4.184c0.659,0.003,1.323,0.089,1.943,0.261 c1.482-1.004,2.132-0.796,2.132-0.796c0.423,1.068,0.157,1.857,0.077,2.054c0.497,0.542,0.798,1.235,0.798,2.082 c0,2.981-1.814,3.637-3.543,3.829c0.279,0.24,0.527,0.713,0.527,1.437c0,1.037-0.01,1.874-0.01,2.129 c0,0.208,0.14,0.449,0.534,0.373c3.081-1.028,5.302-3.935,5.302-7.362C15.76,3.906,12.285,0.431,7.999,0.431z"/></svg>
+</span><span class="username">rrmoelker</span></a>
+
+        </li>
+        
+
+        
+        <li>
+          <a href="https://www.linkedin.com/company/dreamonward">
+	<span class="icon"><svg viewBox="0 0 480 480"><path id="LinkedIn" d="M430.117,261.543V420.56h-92.188V272.193c0-37.271-13.334-62.707-46.703-62.707   c-25.473,0-40.632,17.142-47.301,33.724c-2.432,5.928-3.058,14.179-3.058,22.477V420.56h-92.219c0,0,1.242-251.285,0-277.32h92.21   v39.309c-0.187,0.294-0.43,0.611-0.606,0.896h0.606v-0.896c12.251-18.869,34.13-45.824,83.102-45.824   C384.633,136.724,430.117,176.361,430.117,261.543z M52.183,9.558C20.635,9.558,0,30.251,0,57.463   c0,26.619,20.038,47.94,50.959,47.94h0.616c32.159,0,52.159-21.317,52.159-47.94C103.128,30.251,83.734,9.558,52.183,9.558z    M5.477,420.56h92.184v-277.32H5.477V420.56z"/></svg></span><span class="username">dreamonward</span>
+</a>
+
+        </li>
+        
+
+        
+
+        <li>
+          <a href="mailto:info@dreamonward.com"><span class="icon"></span> info@dreamonward.com</a>
+        </li>
+      </ul>
+    </div>
+
+
+    <div class="footer-block contact" >
+      <h4 class="show-for-sr">Info</h4>
+      <span>KvK</span> <span>56017235</span><br>
+      <span>General Terms and Conditions:
+        <a href="/assets/terms/AV_DreamOnward_EN_2016-10-03.pdf">EN</a>
+        <a href="/assets/terms/AV_DreamOnward_NL_2016-10-03.pdf">NL</a></span>
+    </div>
+  </div>
+
+
+</footer>
+
+  </body>
+
+  <script src="/assets/vendor/lightbox/js/lightbox-plus-jquery.min.js"></script>
+  
+  <script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-83787018-1', 'auto');
+  ga('send', 'pageview');
+
+</script>
+</html>
