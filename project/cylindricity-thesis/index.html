@@ -6,8 +6,8 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
-  <title>Talk to the plant | DreamOnward</title>
-  <meta name="description" content="Hackathon project that automatically waters plant when it gets “thirsty”.">
+  <title>Cylindricity Thesis | DreamOnward</title>
+  <meta name="description" content="Master thesis on finding the smallest coaxial cylinder around a point cloud.">
 
   <!-- google analytics will only hit DNS on script execution, prefetch DNS -->
   <link rel="dns-prefetch" href="//www.google-analytics.com">
@@ -18,7 +18,7 @@
   <link type="text/css" rel="stylesheet" href="/assets/main-f021d588a416e00beed710bc60b3e7d8ac016a8d0eb7a5f17faa05cb145c27b4.css">
   <link type="text/css" rel="stylesheet" href="/assets/syntax-pygments-306491d01ec67c312c7391230abbf00e22dbdb2a9c283cb4cf00dc270ce28162.css">
   <link href="/assets/vendor/lightbox/css/lightbox.min.css" rel="stylesheet">
-  <link rel="canonical" href="https://dreamonward.com/project/talk-to-the-plant/">
+  <link rel="canonical" href="https://dreamonward.com/project/cylindricity-thesis/">
 </head>
 
 
@@ -55,36 +55,72 @@
     <article class="project container" itemscope itemtype="http://schema.org/BlogPosting">
 
   <header class="post-header">
-    <h1 class="post-title" itemprop="name headline">Talk to the plant</h1>
+    <h1 class="post-title" itemprop="name headline">Cylindricity Thesis</h1>
   </header>
 
   <div class="gallery-container">
     
       <a class="gallery-thumb-link"
-          href="soil-humidity-sensor-setup.jpg"
+          href="cylindricity-thesis.png"
           data-lightbox="project-images"
-          data-title="Arduino moisture sensor test setup." 
+          data-title="All possible cylinder pairs through a point cloud of just 6 points. There are 80 solutions for this particular point set." 
           >
           
-          <img src="/assets/talk-to-the-plant/soil-humidity-sensor-setup-5ceb9902c306c42c9514b915776b3e9e75d4c61bad489477ac6a4179c5e92c54.jpg" alt="Arduino moisture sensor test setup." class=gallery-thumb width="200" height="200">
+          <img src="/assets/cylindricity-thesis/cylindricity-thesis-5ceb9902c306c42c9514b915776b3e9e75d4c61bad489477ac6a4179c5e92c54.png" alt="All possible cylinder pairs through a point cloud of just 6 points. There are 80 solutions for this particular point set." class=gallery-thumb width="200" height="200">
         </a>
     
       <a class="gallery-thumb-link"
-          href="water-system-test-setup.jpg"
+          href="slide-3-types-cylindricity-solutions.png"
           data-lightbox="project-images"
-          data-title="Arduino watering system setup with LED indicator." 
+          data-title="All possible distributions of 6 points over a non trivial coaxial cylinder pair." 
           >
           
-          <img src="/assets/talk-to-the-plant/water-system-test-setup-5ceb9902c306c42c9514b915776b3e9e75d4c61bad489477ac6a4179c5e92c54.jpg" alt="Arduino watering system setup with LED indicator." class=gallery-thumb width="200" height="200">
+          <img src="/assets/cylindricity-thesis/slide-3-types-cylindricity-solutions-5ceb9902c306c42c9514b915776b3e9e75d4c61bad489477ac6a4179c5e92c54.png" alt="All possible distributions of 6 points over a non trivial coaxial cylinder pair." class=gallery-thumb width="200" height="200">
         </a>
     
       <a class="gallery-thumb-link"
-          href="ui-pick-plant.png"
+          href="slide-point-set-preconditioning.png"
           data-lightbox="project-images"
-          data-title="Watering system mobile app plant type selection interface." 
+          data-title="The 6 points for which a coaxial cylinder pair is calculated is first preconditioned. By translating, scaling and rotating the points we can eliminate many variables from the system." 
           >
           
-          <img src="/assets/talk-to-the-plant/ui-pick-plant-5ceb9902c306c42c9514b915776b3e9e75d4c61bad489477ac6a4179c5e92c54.png" alt="Watering system mobile app plant type selection interface." class=gallery-thumb width="200" height="200">
+          <img src="/assets/cylindricity-thesis/slide-point-set-preconditioning-5ceb9902c306c42c9514b915776b3e9e75d4c61bad489477ac6a4179c5e92c54.png" alt="The 6 points for which a coaxial cylinder pair is calculated is first preconditioned. By translating, scaling and rotating the points we can eliminate many variables from the system." class=gallery-thumb width="200" height="200">
+        </a>
+    
+      <a class="gallery-thumb-link"
+          href="point-to-plane-projection.png"
+          data-lightbox="project-images"
+          data-title="System of equation precondition step, projecting all 6 points onto plane defined by 3 points." 
+          >
+          
+          <img src="/assets/cylindricity-thesis/point-to-plane-projection-5ceb9902c306c42c9514b915776b3e9e75d4c61bad489477ac6a4179c5e92c54.png" alt="System of equation precondition step, projecting all 6 points onto plane defined by 3 points." class=gallery-thumb width="200" height="200">
+        </a>
+    
+      <a class="gallery-thumb-link"
+          href="tolerance-zone-cylinder.png"
+          data-lightbox="project-images"
+          data-title="Tolerance zone measurement of a cylinder by fitting the smallest coaxial cylinder pair." 
+          >
+          
+          <img src="/assets/cylindricity-thesis/tolerance-zone-cylinder-5ceb9902c306c42c9514b915776b3e9e75d4c61bad489477ac6a4179c5e92c54.png" alt="Tolerance zone measurement of a cylinder by fitting the smallest coaxial cylinder pair." class=gallery-thumb width="200" height="200">
+        </a>
+    
+      <a class="gallery-thumb-link"
+          href="cylindricity-calculation-step1.png"
+          data-lightbox="project-images"
+          data-title="Steps taken to compute simplification of coaxial cylinder pair equation for 6 points." 
+          >
+          
+          <img src="/assets/cylindricity-thesis/cylindricity-calculation-step1-5ceb9902c306c42c9514b915776b3e9e75d4c61bad489477ac6a4179c5e92c54.png" alt="Steps taken to compute simplification of coaxial cylinder pair equation for 6 points." class=gallery-thumb width="200" height="200">
+        </a>
+    
+      <a class="gallery-thumb-link"
+          href="cylindricity-calculation-step2.png"
+          data-lightbox="project-images"
+          data-title="Runtime operations performed on point set to determine all possible coaxial cylinder pairs." 
+          >
+          
+          <img src="/assets/cylindricity-thesis/cylindricity-calculation-step2-5ceb9902c306c42c9514b915776b3e9e75d4c61bad489477ac6a4179c5e92c54.png" alt="Runtime operations performed on point set to determine all possible coaxial cylinder pairs." class=gallery-thumb width="200" height="200">
         </a>
     
   </div>
@@ -92,50 +128,72 @@
 <div class="project-meta">
     <dl>
       <dt>Date</dt>
-      <dd><time datetime="2016-07-22T00:00:00+00:00" itemprop="datePublished">Jul 22, 2016</time></dd>
+      <dd><time datetime="2014-06-11T16:09:19+00:00" itemprop="datePublished">Jun 11, 2014</time></dd>
 
       
 
       
-      <dt>GitHub</dt>
-      <dd><a href="https://github.com/voorhoede-labs/talk-to-the-plant">https://github.com/voorhoede-labs/talk-to-the-plant</a></dd>
-      
 
       
-      <dt>Role</dt>
-      <dd>Team member</dd>
-      
 
-      
-      <dt>Contribution</dt>
-      <dd>Arduino sensor, servo and REST api</dd>
       
 
       <dt>Project type</dt>
       <dd>
         
-        DreamOnward project
+        <span title="Project done in the period before DreamOnward">Before DreamOnward</span>
         
       </dd>
 
       
+      <dt>Techniques</dt>
+
+      <dd>
+        <ul>
+        
+        <li>
+        Linear Algebra, Computational geometry, Nonlinear programming
+        </li>
+        
+        <li>
+        Mathematica
+        </li>
+        
+        <li>
+        C++
+        </li>
+        
+        <li>
+        Qt
+        </li>
+        
+        <li>
+        MATLAB
+        </li>
+        
+        <li>
+        Latex
+        </li>
+        
+        </ul>
+      </dd>
+      
     </dl>
 
     
-    <a href="https://github.com/voorhoede-labs/talk-to-the-plant" class="button">Project details</a>
+    <a href="http://irs.ub.rug.nl/dbi/5385bd92ccd96" class="button">Project details</a>
     
   </div>
 
   <div class="post-content" itemprop="articleBody">    
-    <p>Hackathon project that automatically waters plant when it gets “thirsty”.</p>
+    <p>Master thesis on: “Determining cylinder pairs from point clouds”.</p>
 
-<p>Using a mobile site a plants soil humidity is measured and it can be remotely watered.
-A soil sensor and water bucket servo are hooked to an Arduino.
-The Arduino displays the soil humidity on a LED strip and actuates the servo on button press or on API call.</p>
+<figure>
+<img src="/project/cylindricity-thesis/enumeration_complexity.png" alt="Brute force minimal coaxial cylinder pair calculation computation versus point cloud size" />
+<figcaption>Brute force minimal coaxial cylinder pair calculation computation versus point cloud size</figcaption>
+</figure>
 
-<p>A static mobile site communicates to the Arduino’s REST server.
-The mobile site/app allows a user to define a plant, location and name it.
-It shows the soil humidity in real time and allows watering with a simple button press.</p>
+<p>For more information, please see thesis <a href="http://irs.ub.rug.nl/dbi/5385bd92ccd96">Thesis: Determining cylinder pairs from point clouds</a></p>
 
   </div>
 
