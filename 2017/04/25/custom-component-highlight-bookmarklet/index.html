@@ -82,7 +82,7 @@ We’ll look how we can identify app components structure by adding some custom 
 
 <p>The goal is to quickly see how a web app is composed by showing all web components.</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>&lt;body&gt;
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>&lt;body&gt;
 	&lt;my-app&gt;
 		&lt;div&gt;
 			&lt;my-list&gt;
@@ -92,8 +92,7 @@ We’ll look how we can identify app components structure by adding some custom 
 		&lt;/div&gt;
 	&lt;/my-app&gt;
 &lt;/body&gt;
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <p>Say you have the basic application structure from above.
 We will look how we can determine and style the <code class="highlighter-rouge">my-app</code>, <code class="highlighter-rouge">my-list</code> and <code class="highlighter-rouge">my-item</code> components so you can easily identify them as a developer.</p>
@@ -118,29 +117,25 @@ Luckily these custom elements have one very clear property, they are not a stand
 
 <p>A quick look at <a href="https://developer.mozilla.org/en-US/docs/Web/HTML/Element">MDN</a> yields the following list:</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>knownTags = ['address', 'article', 'aside', 'footer', 'h1','h2','h3','h4','h5','h6', 'header', 'hgroup', 'nav', 'section', 'dd', 'div', 'dl', 'dt', 'figcaption', 'figure', 'hr', 'li', 'main', 'ol', 'p', 'pre', 'ul', 'a', 'abbr', 'b', 'bdi', 'bdo', 'br', 'cite', 'code', 'data', 'dfn', 'em', 'i', 'kbd', 'mark', 'q', 'rp', 'rt', 'rtc', 'ruby', 's', 'samp', 'small', 'span', 'strong', 'sub', 'sup', 'time', 'u', 'var', 'wbr','caption', 'col', 'colgroup', 'table', 'tbody', 'td', 'tfoot', 'th', 'thead', 'tr', 'button', 'datalist', 'fieldset', 'form', 'input', 'label', 'legend', 'meter', 'optgroup', 'option', 'output', 'progress', 'select', 'textarea' ]
-</code></pre>
-</div>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>knownTags = ['address', 'article', 'aside', 'footer', 'h1','h2','h3','h4','h5','h6', 'header', 'hgroup', 'nav', 'section', 'dd', 'div', 'dl', 'dt', 'figcaption', 'figure', 'hr', 'li', 'main', 'ol', 'p', 'pre', 'ul', 'a', 'abbr', 'b', 'bdi', 'bdo', 'br', 'cite', 'code', 'data', 'dfn', 'em', 'i', 'kbd', 'mark', 'q', 'rp', 'rt', 'rtc', 'ruby', 's', 'samp', 'small', 'span', 'strong', 'sub', 'sup', 'time', 'u', 'var', 'wbr','caption', 'col', 'colgroup', 'table', 'tbody', 'td', 'tfoot', 'th', 'thead', 'tr', 'button', 'datalist', 'fieldset', 'form', 'input', 'label', 'legend', 'meter', 'optgroup', 'option', 'output', 'progress', 'select', 'textarea' ]
+</code></pre></div></div>
 
 <p>We want to select all elements that do not have these tags.
 For that we can use the CSS not selector like:</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>:not( address ):not( article ) ...
-</code></pre>
-</div>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>:not( address ):not( article ) ...
+</code></pre></div></div>
 
 <p>We create the selector and find nodes using:</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>notCss = knownTags.map(tag =&gt; `:not( ${ tag } )`).join('')
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>notCss = knownTags.map(tag =&gt; `:not( ${ tag } )`).join('')
 nodes = document.querySelectorAll(`body ${ notCss }`)
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <p>The actual full CSS selector is very long:</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>:not( address ):not( article ):not( aside ):not( footer ):not( h1 ):not( h2 ):not( h3 ):not( h4 ):not( h5 ):not( h6 ):not( header ):not( hgroup ):not( nav ):not( section ):not( dd ):not( div ):not( dl ):not( dt ):not( figcaption ):not( figure ):not( hr ):not( li ):not( main ):not( ol ):not( p ):not( pre ):not( ul ):not( a ):not( abbr ):not( b ):not( bdi ):not( bdo ):not( br ):not( cite ):not( code ):not( data ):not( dfn ):not( em ):not( i ):not( kbd ):not( mark ):not( q ):not( rp ):not( rt ):not( rtc ):not( ruby ):not( s ):not( samp ):not( small ):not( span ):not( strong ):not( sub ):not( sup ):not( time ):not( u ):not( var ):not( wbr ):not( caption ):not( col ):not( colgroup ):not( table ):not( tbody ):not( td ):not( tfoot ):not( th ):not( thead ):not( tr ):not( button ):not( datalist ):not( fieldset ):not( form ):not( input ):not( label ):not( legend ):not( meter ):not( optgroup ):not( option ):not( output ):not( progress ):not( select ):not( textarea )
-</code></pre>
-</div>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>:not( address ):not( article ):not( aside ):not( footer ):not( h1 ):not( h2 ):not( h3 ):not( h4 ):not( h5 ):not( h6 ):not( header ):not( hgroup ):not( nav ):not( section ):not( dd ):not( div ):not( dl ):not( dt ):not( figcaption ):not( figure ):not( hr ):not( li ):not( main ):not( ol ):not( p ):not( pre ):not( ul ):not( a ):not( abbr ):not( b ):not( bdi ):not( bdo ):not( br ):not( cite ):not( code ):not( data ):not( dfn ):not( em ):not( i ):not( kbd ):not( mark ):not( q ):not( rp ):not( rt ):not( rtc ):not( ruby ):not( s ):not( samp ):not( small ):not( span ):not( strong ):not( sub ):not( sup ):not( time ):not( u ):not( var ):not( wbr ):not( caption ):not( col ):not( colgroup ):not( table ):not( tbody ):not( td ):not( tfoot ):not( th ):not( thead ):not( tr ):not( button ):not( datalist ):not( fieldset ):not( form ):not( input ):not( label ):not( legend ):not( meter ):not( optgroup ):not( option ):not( output ):not( progress ):not( select ):not( textarea )
+</code></pre></div></div>
 
 <p>Next up is actually highlighting these non standard elements in the DOM.</p>
 
@@ -154,7 +149,7 @@ Of course we could also inline the CSS, but this just seemed a bit nicer.</p>
 
 <p>The result is as follows:</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>nodesArray.map( node =&gt; {
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>nodesArray.map( node =&gt; {
   const outer = document.createElement('div');
   outer.className='debug-wrapper';
   const inner = document.createElement('div');
@@ -185,8 +180,7 @@ const rules = [`
 
 const sheet = window.document.styleSheets[0];
 rules.map(rule =&gt; sheet.insertRule(rule, sheet.cssRules &amp;&amp; sheet.cssRules.length || 0) ); 
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <p>For the complete code see the <a href="https://github.com/RRMoelker/component-highlight-bookmarklet">GitHub project</a>.</p>
 

@@ -137,10 +137,9 @@ if not wlan.isconnected():
 
 <p>Next upload this new file to the WiPy using FTP. Open the connection using either <code class="highlighter-rouge">ftp 192.168.1.1</code> or <code class="highlighter-rouge">open 192.168.1.1</code> (depending on your OS). Login with user “<strong>micro</strong>” and password “<strong>python</strong>”. Then issue the following commands:</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>cd flash
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>cd flash
 send boot.py
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <p>Finally close the connection using <code class="highlighter-rouge">CTRL-D</code>.
 FTP upload of new “<strong>boot.py</strong>” file to WiPy.</p>
@@ -209,19 +208,18 @@ FTP upload of new “<strong>boot.py</strong>” file to WiPy.</p>
 <span class="c"># Save as file upload.sh</span>
 <span class="c"># first argument is WiPy IP</span>
 
-lftp -u micro,python <span class="nv">$1</span> <span class="sh">&lt;&lt; EOF
+lftp <span class="nt">-u</span> micro,python <span class="nv">$1</span> <span class="o">&lt;&lt;</span> <span class="no">EOF</span><span class="sh">
 
 cd /flash
 put main.py
 
 bye
-</span><span class="err">EOF</span></code></pre></figure>
+EOF</span></code></pre></figure>
 
 <p>You can use it to upload your “<strong>main.py</strong>” file using:</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>sh ./upload.sh 192.168.1.48
-</code></pre>
-</div>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>sh ./upload.sh 192.168.1.48
+</code></pre></div></div>
 
 <h2 id="telnet">Telnet</h2>
 

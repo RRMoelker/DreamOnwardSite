@@ -114,17 +114,17 @@
 
 <p>The duty cycle on the WiPy timers control the PWM signal. The duty cycle is the fraction of an entire PWM signal that has high voltage. The duty cycle for a target servo angle is calculated as follows. First we calculate the fraction the target angle is of the full servo range. Next the pulse width of the target angle is calculated. Finally we use the pulse width to determine the duty cycle.</p>
 
-<h4 id="calculate-the-angle-fraction">1) Calculate the angle fraction</h4>
+<h4 id="1-calculate-the-angle-fraction">1) Calculate the angle fraction</h4>
 <p>For the width calculation we need to know what fraction the target angle is of the full servo range. In Python code this accounts to:</p>
 
 <p class="indent-code">angle_fraction = angle / ROTATIONAL_RANGE</p>
 
-<h4 id="angle-fraction-to-pulse-width">2) Angle fraction to pulse width</h4>
+<h4 id="2-angle-fraction-to-pulse-width">2) Angle fraction to pulse width</h4>
 <p>We calculate the pulse width from the angle fraction:</p>
 
 <p class="indent-code">pulse_width = PULSE_MIN + angle_fraction * (PULSE_MAX — PULSE_MIN)</p>
 
-<h4 id="pulse-width-to-percentage-of-pwm-frame">3) Pulse width to percentage of PWM frame</h4>
+<h4 id="3-pulse-width-to-percentage-of-pwm-frame">3) Pulse width to percentage of PWM frame</h4>
 <p>The WiPy PWM signal is controlled by a timer that takes the signal frequency and duty cycle as an input. For this servo a frequency of 50Hz works well. The duty cycle is the percentage of a single PWM pulse that is high voltage.</p>
 
 <p>The PWM signal frame is duration of a full signal cycle (high and low part). Given the frequency we calculate it by:</p>

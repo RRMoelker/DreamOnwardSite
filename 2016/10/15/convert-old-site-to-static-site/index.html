@@ -70,7 +70,7 @@
 
 <p>The goal is to make a copy of the remote site to a local directory. We need a downloader that will crawl through our site with all it’s links and download all the HTML, CSS, JS and images that it finds. Good old wget does this tasks wonderfully:</p>
 
-<figure class="highlight"><pre><code class="language-bash" data-lang="bash">wget --mirror --adjust-extension --page-requisites --no-parent  -U <span class="s1">'Mozilla/5.0 (X11; Linux x86_64; rv:30.0) Gecko/20100101 Firefox/30.0'</span> http://myproject.com</code></pre></figure>
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash">wget <span class="nt">--mirror</span> <span class="nt">--adjust-extension</span> <span class="nt">--page-requisites</span> <span class="nt">--no-parent</span>  <span class="nt">-U</span> <span class="s1">'Mozilla/5.0 (X11; Linux x86_64; rv:30.0) Gecko/20100101 Firefox/30.0'</span> http://myproject.com</code></pre></figure>
 
 <p>Note I added Firefox as a user agent. My requests were being denied. Adding the user agent let those request through to the server.</p>
 
@@ -90,7 +90,7 @@
 <h3 id="path-replacement">Path replacement</h3>
 <p>Having the domain name in a url is not necessarily a problem. URLs should resolve correctly once it replaces the existing dynamic site. Personally however I dislike a hard coded domain name. To test it locally you would have to change your DNS resolution by editing the host file. Or you can change the URLs themselves by running the following command:</p>
 
-<figure class="highlight"><pre><code class="language-bash" data-lang="bash">find . -type f -name <span class="s2">"*.html"</span> -o -name <span class="s2">"*.css"</span> -o -name <span class="s2">"*.js"</span> | xargs sed -i s,http://mydomain.com,,g</code></pre></figure>
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash">find <span class="nb">.</span> <span class="nt">-type</span> f <span class="nt">-name</span> <span class="s2">"*.html"</span> <span class="nt">-o</span> <span class="nt">-name</span> <span class="s2">"*.css"</span> <span class="nt">-o</span> <span class="nt">-name</span> <span class="s2">"*.js"</span> | xargs sed <span class="nt">-i</span> s,http://mydomain.com,,g</code></pre></figure>
 
 <p>The previous command will change:</p>
 
