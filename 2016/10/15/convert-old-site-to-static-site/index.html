@@ -74,6 +74,15 @@
 
 <p>Note I added Firefox as a user agent. My requests were being denied. Adding the user agent let those request through to the server.</p>
 
+<h3 id="exclude-dirs">Exclude dirs</h3>
+
+<p>When mirroring a site you may want to exclude certain paths.
+I recently ran into the problem that for every page the login link was being treated as a new page.
+The current path was being appended to the login URL like: <code class="highlighter-rouge">http://myproject.com/accounts/login?next=where/i/came/from</code>.
+To exclude all these pages/resources from being mirrored use the <code class="highlighter-rouge">--exclude-directories</code> argument.</p>
+
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash">wget <span class="nt">--mirror</span> <span class="nt">--exclude-directories</span><span class="o">=</span>/accounts/login ... http://myproject.com</code></pre></figure>
+
 <h2 id="test-locally">Test locally</h2>
 <p>Run a local http server in the downloaded directory (called <strong>myproject.com</strong>), for example use the very simple <a href="https://github.com/indexzero/http-server">node http server</a> by executing:</p>
 
@@ -99,6 +108,19 @@
 <p>into</p>
 
 <p class="indent-code">/wp-includes/js/jquery/jquery.js</p>
+
+<h3 id="get-parameterized-resources">GET parameterized resources</h3>
+
+<p>Asset URLs containing GET params will probably no longer work when statically served. The problem is that the params are ignored by the web server.</p>
+
+<p>In practice this means a web server will serve the file <code class="highlighter-rouge">/public/fonts/fontawesome-webfont.woff2</code> for a resource named <code class="highlighter-rouge">/public/fonts/fontawesome-webfont.woff2?v=4.3.0</code> (Note the <code class="highlighter-rouge">?v=4.3.0</code>).</p>
+
+<p>The client browser will not load the resource.</p>
+
+<p>The simplest solution is to make a none parameter copy of the original resource.
+e.g.:</p>
+
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash">cp <span class="s2">"public/fonts/fontawesome-webfont.woff2?v=4.3.0"</span> <span class="s2">"public/fonts/fontawesome-webfont.woff2"</span></code></pre></figure>
 
 <h2 id="serve-it-up">Serve it up</h2>
 <p>We are going to serve our static site through GitHub pages. Create a new GitHub repository named myproject. We can simply upload our entire download to the new github project (<strong>myproject</strong>) master branch. After doing that go to the option menu and change the domain to your custom domain.</p>
@@ -129,6 +151,8 @@
 
 <p>Now wait patiently for you DNS changes to propagate after which you can take your old servers offline. And don’t forget to enjoy not having to maintain those old scrappy servers anymore.</p>
 
+<h2 id="update-1-nov-2017">Update 1 Nov 2017</h2>
+<p>Exclude dir wget parameter and GET params solution added.</p>
 
   </div>
 
