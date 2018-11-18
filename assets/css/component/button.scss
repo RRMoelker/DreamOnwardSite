@@ -1,0 +1,20 @@
+a.button {
+  display: inline-block;
+}
+
+.button {
+  font-size: 1.5rem;
+  color: white;
+  background-color: $primary-color-darker;
+  padding: $base-spacing;
+  text-decoration: none;
+
+  &:hover, &:focus {
+    background-color: $primary-color-base;
+    color: white;
+    text-decoration: none;
+  }
+  &:active {
+    background-color: $primary-color-light;
+  }
+}

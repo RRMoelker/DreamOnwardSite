@@ -1,5 +1,5 @@
 footer {
-  background-color: $dark-blue;
+  background-color: $primary-color-darker;
   font-size: 1.2em;
 }
 
@@ -17,7 +17,7 @@ footer svg {
 
 
 .footer-block {
-  border-bottom: solid 2px $primary-contrast;
+  border-bottom: solid 2px $accent2-color-lighter;
   padding-bottom: $base-spacing;
   margin-bottom: 2 * $base-spacing;
 }
@@ -40,12 +40,12 @@ footer .container a {
 }
 footer .container a {
   &:hover, &:active {
-      color: $primary-contrast;
+      color: $accent2-color-lighter;
   }
 }
 
 footer h4 {
-    color: $primary-contrast;
+    color: $accent2-color-lighter;
     font-size: 1.4em;
 }
 

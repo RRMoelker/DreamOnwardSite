@@ -1,0 +1,12 @@
+.c-alert {
+  padding: $base-spacing;
+  border: solid 1px $primary-color-darker;
+  background-color: $primary-color-lightest;
+}
+.c-alert__title {
+  color: $primary-color-darkest;
+  font-size: 2rem;
+}
+.c-alert__description {
+  color: $primary-color-dark;
+}

@@ -1,6 +1,6 @@
 .banner {
-  background-color: $dark-blue;
-
+  background-color: $primary-color-base;
+  border-bottom: solid 5px $primary-color-light;
 }
 
 .site-nav {
@@ -14,6 +14,7 @@
 .site-nav a {
   color: white;
   text-decoration: none;
+  transition: $base-time * 0.5;
 }
 
 .site-nav ul {
@@ -29,7 +30,8 @@
 
 .site-nav ul a {
   &:hover, &:active {
-    background-color: $primary-color;
+    background-color: $primary-color-base;
+    border-bottom: solid 5px $primary-color-light;
   }
 }
 

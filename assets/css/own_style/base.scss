@@ -9,12 +9,14 @@ body, figure {
 //General styles for page
 body {
   font-family: $roboto;
-  background: $light-gray;
+  background: $neutral-color-lightest;
+  color: $neutral-color-darkest;
 }
 
 p {
   font-size: 1.2em;
   line-height: 1.6em;
+  max-width: 75ch;
 }
 
 img {
@@ -22,10 +24,10 @@ img {
 }
 
 a {
-  color: $dark-blue;
+  color: $primary-color-darker;
   text-decoration: none;
   &:hover, &:active {
-    color: $clear-green;
+    color: $accent1-color-dark;
     text-decoration: underline;
     transition: $base-time;
   }
@@ -40,57 +42,18 @@ a {
   clip: rect(0, 0, 0, 0);
 }
 
-@media (min-width: $on-large) {
-  .container {
-    width: $on-large;
-    margin: 0 auto;
-  }
-}
-
-
 .extra-info {
   margin-top: 0;
-  background-color: $primary-color;
+  background-color: $primary-color-base;
   padding: $base-spacing 2 * $base-spacing;
 }
 
 .page-sub-heading {
-  background-color: $green;
+  background-color: $accent1-color-base;
   padding: $base-spacing 2 * $base-spacing;
 
   a {
     color: white;
     text-decoration: none;
-  }
-}
-
-a.button {
-  display: inline-block;
-  background-color: $dark-blue;
-  color: white;
-  padding: $base-spacing;
-}
-
-//
-// CSS used in content
-// 
-
-.center {
-  display: block;
-  margin: 0 auto;
-}
-
-.float-clear {
-  clear: both;
-}
-
-.float-clear-after {
-  &:after {
-     visibility: hidden;
-     display: block;
-     font-size: 0;
-     content: " ";
-     clear: both;
-     height: 0;
   }
 }

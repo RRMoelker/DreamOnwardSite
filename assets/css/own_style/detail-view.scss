@@ -6,7 +6,7 @@
 
   h1 {
     font-size: 2.5em;
-    font-weight: bold; 
+    font-weight: bold;
   }
 
   @include clearfix;
@@ -18,7 +18,7 @@
 }
 
 .project-meta {
-  background-color: $faint-blue;  
+  background-color: $primary-color-lightest;
   font-family: "Robotica condensed";
   font-size: 1.1em;
   padding: $base-spacing;
@@ -82,7 +82,7 @@
   h2 {
     margin-top: 3rem;
   }
-  
+
   p {
     margin-top: 0.5em;
   }

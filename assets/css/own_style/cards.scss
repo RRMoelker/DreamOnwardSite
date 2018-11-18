@@ -1,5 +1,8 @@
 //based on https://codepen.io/cssgirl/pen/NGKgrM
 
+$blue-transparent: transparentize($primary-color-base, 0.2);
+$green-transparent: transparentize($accent1-color-base, 0.2);
+
 //Todo clean up some crappy code
 .cards {
   display: flex;
@@ -20,11 +23,11 @@
 
 .card.post-card {
   .card-title {
-    background-color: $dark-blue-transparent;
+    background-color: $blue-transparent;
   }
   &:hover, &:focus {
     .card-title {
-      background-color: $dark-blue;
+      background-color: $primary-color-darker;
     }
   }
 }
@@ -35,7 +38,7 @@
   }
   &:hover, &:focus {
     .card-title {
-      background-color: $green;
+      background-color: $accent1-color-base;
     }
   }
 }
@@ -49,10 +52,10 @@ a.card {
 
 .card {
   position: relative;
-  margin-bottom: $base-spacing; 
-  padding-bottom: 2 * $base-spacing; 
+  margin-bottom: $base-spacing;
+  padding-bottom: 2 * $base-spacing;
   background: white;
-  color: $faint-black; //the whole content of the card becomes linked, so this will give the text a "norma;" appearance
+  color: $neutral-color-darker; //the whole content of the card becomes linked, so this will give the text a "norma;" appearance
   text-decoration: none;
   box-shadow: 0 0 8px 0 $shadow;
 
